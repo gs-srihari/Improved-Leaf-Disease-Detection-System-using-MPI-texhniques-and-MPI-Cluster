@@ -7,15 +7,15 @@ l=[]
 l1=[]
 l2=['Unhealthy','Healthy','Unhealthy','Unhealthy','Healthy','Healthy','Healthy','Unhealthy','Unhealthy','Unhealthy']
 for i in range(10):
-imgn = "Untitled"+str(i)+".jpg"
-img = cv2.imread(imgn)
+    imgn = "Untitled"+str(i)+".jpg"
+    img = cv2.imread(imgn)
     img1 = img
     #print(img.shape)
-hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+    hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
     #cv2.imshow('HSV image', hsv)
     #cv2.waitKey(0)
-lower_blue = np.array([14,32.64,22.185])
-upper_blue = np.array([34,255,232.815])
+    lower_blue = np.array([14,32.64,22.185])
+    upper_blue = np.array([34,255,232.815])
     mask = cv2.inRange(hsv, lower_blue, upper_blue)
     res = cv2.bitwise_and(img1,img1, mask= mask)
     #cv2.imshow('HSV image', mask)
@@ -25,7 +25,7 @@ upper_blue = np.array([34,255,232.815])
     #cv2.waitKey(0)
     #cv2.destroyAllWindows()
     res1 = cv2.cvtColor(res, cv2.COLOR_BGR2GRAY)
-glcm = greycomatrix(res1, [1], [0])
+    glcm = greycomatrix(res1, [1], [0])
     contrast = greycoprops(glcm, 'contrast')
     #print(contrast[0][0])
     Energy =greycoprops(glcm, 'energy')
@@ -43,16 +43,16 @@ glcm = greycomatrix(res1, [1], [0])
     #print(res.sum())
     smoothness = 1 - (1/(1+res.sum()))
     #print(smoothness)
-l.append(contrast[0][0])
-l.append(Energy[0][0])
-l.append(Homogeneity[0][0])
-l.append(m)
-l.append(s)
-l.append(v)
-l.append(e)
-l.append(rms)
-l.append(smoothness)
-l.append(l2[i])
+    l.append(contrast[0][0])
+    l.append(Energy[0][0])
+    l.append(Homogeneity[0][0])
+    l.append(m)
+    l.append(s)
+    l.append(v)
+    l.append(e)
+    l.append(rms)
+    l.append(smoothness)
+    l.append(l2[i])
     l1.append(l)
     l=[]
 #print(l1)
@@ -121,8 +121,8 @@ from mpi4py import MPI
 comm = MPI.COMM_WORLD
 rank = comm.Get_rank()
 if rank==0:
-imgn = "test3.jpg"
-img = cv2.imread(imgn)
+    imgn = "test3.jpg"
+    img = cv2.imread(imgn)
     cv2.imshow("Tested leaf", img)
     cv2.waitKey(0)
     data5 = comm.recv(source=1, tag=5)
@@ -134,14 +134,14 @@ img = cv2.imread(imgn)
     data2 = comm.recv(source=2, tag=2)
     data3 = comm.recv(source=3, tag=3)
     data4 = comm.recv(source=4, tag=4)
-sumval=data1+data2+data3+data4
+    sumval=data1+data2+data3+data4
     #print(t2-t1)
     if sumval>0:
-print('The leaf is unhealthy')
+        print('The leaf is unhealthy')
     else:
-print('The leaf is healthy')
+        print('The leaf is healthy')
     t2 = MPI.Wtime()
-tval=(data5+data6+data7+data8)/4 
+    tval=(data5+data6+data7+data8)/4 
     #print(data5)
     #print(data6)
     #print(data7)
@@ -151,14 +151,14 @@ tval=(data5+data6+data7+data8)/4
     #print(tval+t2-t1)
 else:
     t1 = MPI.Wtime()
-img_it=img_list[rank-1]
+    img_it=img_list[rank-1]
     l3=[]
     l4=[]
-hsv = cv2.cvtColor(img_it, cv2.COLOR_BGR2HSV)
+    hsv = cv2.cvtColor(img_it, cv2.COLOR_BGR2HSV)
     #cv2.imshow('HSV image', hsv)
     #cv2.waitKey(0)
-lower_blue = np.array([14,32.64,22.185])
-upper_blue = np.array([34,255,232.815])
+    lower_blue = np.array([14,32.64,22.185])
+    upper_blue = np.array([34,255,232.815])
     mask = cv2.inRange(hsv, lower_blue, upper_blue)
     res = cv2.bitwise_and(img_it,img_it, mask= mask)
     cv2.imshow('HSV image', res)
@@ -170,7 +170,7 @@ upper_blue = np.array([34,255,232.815])
     #cv2.waitKey(0)
     #cv2.destroyAllWindows()
     res1 = cv2.cvtColor(res, cv2.COLOR_BGR2GRAY)
-glcm = greycomatrix(res1, [1], [0])
+    glcm = greycomatrix(res1, [1], [0])
     contrast = greycoprops(glcm, 'contrast')
     Energy =greycoprops(glcm, 'energy')
     #print(Energy[0][0])
@@ -196,10 +196,10 @@ glcm = greycomatrix(res1, [1], [0])
     l3=[]
     l5=logmodel.predict(l4)
     if l5[0]==0:
-print("The leaf part tested is healthy")
+        print("The leaf part tested is healthy")
     else:
-print("The leaf part tested is unhealthy")
+        print("The leaf part tested is unhealthy")
     #print(str(l5[0])+"is prediction for"+str(rank))
-comm.send(l5[0], dest=0, tag=rank)
+    comm.send(l5[0], dest=0, tag=rank)
     t2=MPI.Wtime()
-comm.send(t2-t1, dest=0, tag=rank+4)
+    comm.send(t2-t1, dest=0, tag=rank+4)
